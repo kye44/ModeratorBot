@@ -38,6 +38,7 @@ async def commands(ctx):
 	embed.add_field(name="$givecoins", value="Give a user X amount of coins", inline=False)
 	embed.add_field(name="$takecoins", value="Take X amount of coins from a user", inline=False)
 	embed.add_field(name="$balance", value="Check how many coins you have", inline=False)
+	embed.add_field(name="$balanceof", value="Check how many coins a user has", inline=False)
 	await client.send_message(ctx.message.channel,embed=embed)
 @bot.command(pass_context=True)
 async def addrole(ctx, arg1, arg2):
@@ -119,7 +120,6 @@ async def endpurge(ctx):
 			reward = random.randint(20,200)
 			FindAccount(u.name).Deposit(reward)
 			await client.send_message(ctx.message.channel,"{} has been awarded {} coins for survivng the purge!".format(u.name,reward))
-
 	else:
 		await client.send_message(ctx.message.channel,"You do not have the required permissions for this command")
 @bot.command(pass_context=True)
@@ -161,7 +161,16 @@ async def takecoins(ctx, arg1, arg2):
 @bot.command(pass_context=True)
 async def balance(ctx):
 	await client.send_message(ctx.message.channel,"You currently have {} coins".format(FindAccount(ctx.message.author.name).coins))
-
+@bot.command(pass_context=True)
+async def balanceof(ctx, arg):
+	if ctx.message.channel.permissions_for(ctx.message.author).kick_members:
+		account = FindAccount(arg)
+		if account != False:
+			await client.send_message(ctx.message.channel,"{} currently has {} coins".format(arg,account.coins))
+		else:
+			await client.send_message(ctx.message.channel,"Unable to find user '{}'".format(arg))
+	else:
+		await client.send_message(ctx.message.channel,"You do not have the required permissions for this command")
 @client.event
 async def on_ready():
 	print('Logged in as')
