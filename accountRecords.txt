@@ -1,5 +1,5 @@
 LlamaLAD,125
+TastefulGamer,126
 DiscordServers,0
-TastefulGamer,30
 Discord Server List,0
 Moderator Bot,0

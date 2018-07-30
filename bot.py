@@ -39,6 +39,15 @@ async def commands(ctx):
 	embed.add_field(name="$takecoins", value="Take X amount of coins from a user", inline=False)
 	embed.add_field(name="$balance", value="Check how many coins you have", inline=False)
 	embed.add_field(name="$balanceof", value="Check how many coins a user has", inline=False)
+	embed.add_field(name="$leaderboard", value="View the coin leaderboard", inline=False)
+	await client.send_message(ctx.message.channel,embed=embed)
+@bot.command(pass_context=True)
+async def leaderboard(ctx):
+	temp = accounts
+	temp.sort(key=lambda Account: Account.coins, reverse=True)
+	embed=discord.Embed(title="Leaderboard",color=0x45a5d3)
+	for user in temp:
+		embed.add_field(name=user.user, value="{} coins".format(user.coins), inline=False)
 	await client.send_message(ctx.message.channel,embed=embed)
 @bot.command(pass_context=True)
 async def addrole(ctx, arg1, arg2):
