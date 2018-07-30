@@ -205,4 +205,4 @@ def CheckServerForAccounts():
 		if CheckAccount(user.name) == False:
 			a = Account()
 			a.Create(user.name)
-client.run('NDY5MTcwOTk3NTAxNjI0MzMw.DjD1IA.NtakvdszP945tmDTrSLXSJSFrsM')
+client.run('')
