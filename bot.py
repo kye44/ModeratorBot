@@ -6,6 +6,7 @@ from management.kicking import *
 from economy.coins import *
 from economy.matchmaking import *
 from games.purge import *
+from games.roulette import *
 from discord.ext import commands
 
 client = discord.Client()
@@ -180,6 +181,43 @@ async def balanceof(ctx, arg):
 			await client.send_message(ctx.message.channel,"Unable to find user '{}'".format(arg))
 	else:
 		await client.send_message(ctx.message.channel,"You do not have the required permissions for this command")
+@bot.command(pass_context=True)
+async def startroulette(ctx):
+	if StartRoulette() == False:
+		await client.send_message(ctx.message.channel,"Please wait for the current Roulette Game to finish before starting a new one!")
+	else:
+		await client.send_message(ctx.message.channel,"A new Roulette Game has started. Use $joinroulette for your chance of winning!")
+		
+
+@bot.command(pass_context=True)
+async def rouletteplayers(ctx):
+	if users != []:
+		temp = ""
+		for u in users:
+			temp+=u.name+", "
+		await client.send_message(ctx.message.channel,temp)
+	else:
+		await client.send_message(ctx.message.channge,"There are no players in the Roulette Game!")
+
+@bot.command(pass_context=True)
+async def joinroulette(ctx):
+	server = ctx.message.server
+	user = GetUser(server.members, ctx.message.author.name)
+	if AddRoulettePlayer(user) == False:
+		await client.send_message(ctx.message.channel,"There isn't a Roulette Game active currently!")
+	elif insufficientFunds == True:
+		await client.send_message(ctx.message.channel,"You have insufficient funds!")
+	else:
+		await client.send_message(ctx.message.channel,"You have joined the Roulette Game!")
+
+@bot.command(pass_context=True)
+async def spinroulette(ctx):
+	if ctx.message.channel.permissions_for(ctx.message.author).kick_members:
+		FindAccount(winner).deposit(pot)
+		await client.send_message(ctx.message.channel,"{} has been awarded {} coins for winning the Roulette Game!".format(winner,pot))
+		
+	else:
+		await client.send_message(ctx.message.channel,"You do not have the required permissions for this command!")
 @client.event
 async def on_ready():
 	print('Logged in as')
@@ -205,4 +243,4 @@ def CheckServerForAccounts():
 		if CheckAccount(user.name) == False:
 			a = Account()
 			a.Create(user.name)
-client.run('')
+client.run('NDY5MTcwOTk3NTAxNjI0MzMw.DjD1IA.NtakvdszP945tmDTrSLXSJSFrsM')
